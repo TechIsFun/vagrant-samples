@@ -31,7 +31,7 @@ jobs:
         run: brew install vagrant
 
       - name: Provision Ubuntu VM
-        run: cd vagrant-ubuntu && vagrant up
+        run: cd vagrant-ubuntu && vagrant up --debug
 
   provision-ubuntu-on-ubuntu:
     name: Provision Ubuntu VM on Ubuntu host
@@ -51,4 +51,4 @@ jobs:
         run: sudo apt-get install vagrant -y
       
       - name: Provision Ubuntu VM
-        run: cd vagrant-ubuntu && vagrant up
+        run: cd vagrant-ubuntu && vagrant up --debug
