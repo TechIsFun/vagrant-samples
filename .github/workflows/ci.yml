@@ -1,0 +1,51 @@
+---
+name: Build
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '**.md'
+  pull_request:
+    paths-ignore:
+      - '**.md'
+
+jobs:
+
+  provision-ubuntu-on-macos:
+    name: Provision Ubuntu VM on macos
+    runs-on: macos-latest
+
+    steps:
+      - name: Check out the codebase.
+        uses: actions/checkout@v2
+
+      - name: Install homebrew
+        run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+      - name: Install Virtualbox
+        run: brew install virtualbox
+
+      - name: Install vagrant
+        run: brew install vagrant
+
+      - name: Provision Ubuntu VM
+        run: cd vagrant-ubuntu && vagrant up
+
+provision-ubuntu-on-ubuntu:
+    name: Provision Ubuntu VM on Ubuntu
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the codebase.
+        uses: actions/checkout@v2
+
+      - name: Install Virtualbox
+        run: sudo apt-get install virtualbox -y
+
+      - name: Install vagrant
+        run: sudo apt-get install vagrant -y
+      
+      - name: Provision Ubuntu VM
+        run: cd vagrant-ubuntu && vagrant up
