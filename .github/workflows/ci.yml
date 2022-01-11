@@ -4,12 +4,14 @@ name: Build
 on:
   push:
     branches:
-      - main
+      - '*'
     paths-ignore:
       - '**.md'
   pull_request:
     paths-ignore:
       - '**.md'
+  schedule:
+    - cron: "0 5 * * 4"
 
 jobs:
 
@@ -52,3 +54,23 @@ jobs:
       
       - name: Provision Ubuntu VM
         run: cd vagrant-ubuntu && vagrant up --debug
+
+  provision-raspbian-on-ubuntu:
+    name: Provision Raspbian VM on Ubuntu host
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the codebase.
+        uses: actions/checkout@v2
+
+      - name: Update apt
+        run: sudo apt-get update
+
+      - name: Install Virtualbox
+        run: sudo apt-get install virtualbox -y
+
+      - name: Install vagrant
+        run: sudo apt-get install vagrant -y
+      
+      - name: Provision Raspbian VM
+        run: cd vagrant-raspbian && vagrant up --debug
