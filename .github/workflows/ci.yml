@@ -56,20 +56,29 @@ jobs:
         run: cd vagrant-ubuntu && vagrant up --debug
 
   provision-raspbian-on-macos:
-    name: Provision Raspbian VM on Ubuntu host
+    name: Provision Raspbian VM on MacOS host
     runs-on: macos-latest
 
     steps:
       - name: Check out the codebase
         uses: actions/checkout@v2
 
-      - name: Cache Vagrant boxes
-        uses: actions/cache@v2
-        with:
-          path: ~/.vagrant.d/boxes
-          key: ${{ runner.os }}-vagrant-${{ hashFiles('Vagrantfile') }}
-          restore-keys: |
-            ${{ runner.os }}-vagrant-
+      - name: Install homebrew
+        run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+      - name: Install Virtualbox
+        run: brew install virtualbox
+
+      - name: Install vagrant
+        run: brew install vagrant
+
+      #- name: Cache Vagrant boxes
+      #  uses: actions/cache@v2
+      #  with:
+      #    path: ~/.vagrant.d/boxes
+      #    key: ${{ runner.os }}-vagrant-${{ hashFiles('Vagrantfile') }}
+      #    restore-keys: |
+      #      ${{ runner.os }}-vagrant-
 
       - name: Run vagrant up
         run: cd vagrant-raspbian && vagrant up --debug
