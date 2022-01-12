@@ -55,22 +55,24 @@ jobs:
       - name: Provision Ubuntu VM
         run: cd vagrant-ubuntu && vagrant up --debug
 
-  provision-raspbian-on-ubuntu:
+  provision-raspbian-on-macos:
     name: Provision Raspbian VM on Ubuntu host
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
 
     steps:
-      - name: Check out the codebase.
+      - name: Check out the codebase
         uses: actions/checkout@v2
 
-      - name: Update apt
-        run: sudo apt-get update
+      - name: Cache Vagrant boxes
+        uses: actions/cache@v2
+        with:
+          path: ~/.vagrant.d/boxes
+          key: ${{ runner.os }}-vagrant-${{ hashFiles('Vagrantfile') }}
+          restore-keys: |
+            ${{ runner.os }}-vagrant-
 
-      - name: Install Virtualbox
-        run: sudo apt-get install virtualbox -y
-
-      - name: Install vagrant
-        run: sudo apt-get install vagrant -y
-      
-      - name: Provision Raspbian VM
+      - name: Run vagrant up
         run: cd vagrant-raspbian && vagrant up --debug
+
+      - name: Run ssh connection
+        run: vagrant ssh -c "echo 'Hello world!'"
