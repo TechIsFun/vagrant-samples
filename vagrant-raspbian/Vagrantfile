@@ -11,7 +11,8 @@ Vagrant.configure("2") do |config|
   
   # Update apt
   config.vm.provision "shell", inline: <<-SHELL
-     apt-get update -y
-     apt-get upgrade -y
+    export DEBIAN_FRONTEND=noninteractive
+    apt-get update -y
+    apt-get upgrade -y
   SHELL
 end
