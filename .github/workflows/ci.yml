@@ -1,5 +1,5 @@
 ---
-name: Provision VMs
+name: Build
 
 on:
   push:
@@ -40,11 +40,11 @@ jobs:
 
       - name: Provision VM
         run: vagrant up --debug
-        working-directory: ${{ project }}
+        working-directory: ${{ matrix.projects }}
         
       - name: ssh into box after boot
         run: vagrant ssh -c "echo 'hello world!'"
-        working-directory: ${{ project }}
+        working-directory: ${{ matrix.projects }}
         
   provision-on-ubuntu:
     name: Provision ${{ matrix.projects }} on Ubuntu host
@@ -68,8 +68,8 @@ jobs:
       
       - name: Provision VM
         run: vagrant up --debug
-        working-directory: ${{ project }}
+        working-directory: ${{ matrix.projects }}
         
       - name: ssh into box after boot
         run: vagrant ssh -c "echo 'hello world!'"
-        working-directory: ${{ project }}
+        working-directory: ${{ matrix.projects }}
