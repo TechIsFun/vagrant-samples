@@ -1,5 +1,5 @@
 ---
-name: Build
+name: Provision VMs
 
 on:
   push:
@@ -15,10 +15,13 @@ on:
 
 jobs:
 
-  provision-ubuntu-on-macos:
-    name: Provision Ubuntu VM on Macos host
+  provison-on-macos:
+    name: Provision ${{ matrix.projects }} on MacOS host
     runs-on: macos-10.15
-
+    strategy:
+      matrix:
+        projects: ["vagrant-ubuntu", "vagrant-raspbian"]
+    
     steps:
       - name: Check out the codebase.
         uses: actions/checkout@v2
@@ -35,17 +38,20 @@ jobs:
       - name: Show Vagrant version
         run: vagrant --version
 
-      - name: Provision Ubuntu VM
+      - name: Provision VM
         run: vagrant up --debug
-        working-directory: vagrant-ubuntu
+        working-directory: ${{ project }}
         
       - name: ssh into box after boot
         run: vagrant ssh -c "echo 'hello world!'"
-        working-directory: vagrant-ubuntu
+        working-directory: ${{ project }}
         
-  provision-ubuntu-on-ubuntu:
-    name: Provision Ubuntu VM on Ubuntu host
+  provision-on-ubuntu:
+    name: Provision ${{ matrix.projects }} on Ubuntu host
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        projects: ["vagrant-ubuntu", "vagrant-raspbian"]
 
     steps:
       - name: Check out the codebase.
@@ -60,10 +66,10 @@ jobs:
       - name: Install vagrant
         run: sudo apt-get install vagrant -y
       
-      - name: Provision Ubuntu VM
-        run: cd vagrant-ubuntu && vagrant up --debug
-        working-directory: vagrant-ubuntu
+      - name: Provision VM
+        run: vagrant up --debug
+        working-directory: ${{ project }}
         
       - name: ssh into box after boot
         run: vagrant ssh -c "echo 'hello world!'"
-        working-directory: vagrant-ubuntu
+        working-directory: ${{ project }}
