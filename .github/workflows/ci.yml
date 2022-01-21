@@ -17,7 +17,7 @@ jobs:
 
   provision-ubuntu-on-macos:
     name: Provision Ubuntu VM on Macos host
-    runs-on: macos-latest
+    runs-on: macos-10.15
 
     steps:
       - name: Check out the codebase.
@@ -31,9 +31,15 @@ jobs:
 
       - name: Install vagrant
         run: brew install vagrant
+        
+      - name: Show Vagrant version
+        run: vagrant --version
 
       - name: Provision Ubuntu VM
         run: cd vagrant-ubuntu && vagrant up --debug
+        
+      - name: ssh into box after boot
+        run: vagrant ssh -c "echo 'hello world!'"
 
   provision-ubuntu-on-ubuntu:
     name: Provision Ubuntu VM on Ubuntu host
