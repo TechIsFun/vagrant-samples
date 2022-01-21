@@ -42,3 +42,28 @@ jobs:
       - name: ssh into box after boot
         run: vagrant ssh -c "echo 'hello world!'"
         working-directory: vagrant-ubuntu
+        
+  provision-ubuntu-on-ubuntu:
+    name: Provision Ubuntu VM on Ubuntu host
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the codebase.
+        uses: actions/checkout@v2
+
+      - name: Update apt
+        run: sudo apt-get update
+
+      - name: Install Virtualbox
+        run: sudo apt-get install virtualbox -y
+
+      - name: Install vagrant
+        run: sudo apt-get install vagrant -y
+      
+      - name: Provision Ubuntu VM
+        run: cd vagrant-ubuntu && vagrant up --debug
+        working-directory: vagrant-ubuntu
+        
+      - name: ssh into box after boot
+        run: vagrant ssh -c "echo 'hello world!'"
+        working-directory: vagrant-ubuntu
