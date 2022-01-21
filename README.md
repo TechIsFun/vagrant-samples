@@ -7,5 +7,11 @@ This repository contains samples of vagrant configurations.
 ## Quickstart
 
 ### Start an image
+
+1. cd `vagrant-ubuntu`
+2. `vagrant up`
+
+### Start an image and force provision
+
 1. cd `vagrant-ubuntu`
 2. `vagrant up --provision`
